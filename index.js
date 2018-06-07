@@ -35,13 +35,24 @@ let firstOperand
 let secondOperand
 let lastResult = null
 let deletedLast = false
+let snarkyMessage = false
+let valueFlag = false
 
 function populateDisplay(e) {
     if(!e) {
-        if(deletedLast) {
+        if(deletedLast || valueFlag) {
             displayValue = displayValue
-            deletedLast = !deletedLast
+            deletedLast = false
+            valueFlag = false
         }
+        else if(snarkyMessage) {
+            displayValue = 'Oh hell no!'
+            snarkyMessage = false
+        }
+        // else if(valueFlag) {
+        //     displayValue = displayValue
+        //     valueFlag = !valueFlag
+        // }
         else displayValue = lastResult
     }
     else{
@@ -51,19 +62,25 @@ function populateDisplay(e) {
             else displayValue = `${displayValue}${input}`
         }
     }
+    if(displayValue.length > 22) displayValue = displayValue.slice(1)
     document.querySelector('.display').innerHTML = displayValue
+    if(displayValue == 'Oh hell no!') displayValue = ''
     console.log(`DisplayValue: ${displayValue}, lastresult: ${lastResult}`)
-    // else document.querySelector('.display').innerHTML = displayValue.slice(1)
     
 }
 
 function calculate() {
     if(!currentOperator) return
     secondOperand = displayValue
-    lastResult = operate(currentOperator, Number(firstOperand), Number(secondOperand))
-    populateDisplay()
-    
-    console.log(operate(currentOperator, Number(firstOperand), Number(secondOperand)))
+    if(Number(secondOperand) == 0 && currentOperator == '/') {
+        snarkyMessage = true
+        populateDisplay()
+    }
+    else {
+        lastResult = operate(currentOperator, Number(firstOperand), Number(secondOperand))
+        populateDisplay()
+    }
+    // console.log(operate(currentOperator, Number(firstOperand), Number(secondOperand)))
 }
 
 function deleteLastNum() {
@@ -74,7 +91,39 @@ function deleteLastNum() {
 }
 
 function allClear() {
-console.log('clearing all')
+    displayValue = ''
+    firstOperand = undefined
+    secondOperand = undefined
+    lastResult = null
+    currentOperator = undefined
+    deletedLast = true
+    populateDisplay()
+}
+
+function reverseSign() {
+    displayValue = displayValue.toString()
+    if(displayValue.charAt(0) != '-') displayValue = `-${displayValue}`
+    else displayValue = displayValue.slice(1)
+    valueFlag = true
+    populateDisplay()
+}
+function handleDecimals() {
+    console.log('decimal')
+    if(displayValue == '') {
+        displayValue = '0.'
+        valueFlag = true
+    }
+    else if(displayValue.indexOf('.') != -1) {
+        return
+    }
+    else{
+        valueFlag = true
+        displayValue = `${displayValue}.`
+    }
+    populateDisplay()
+    //case1: display empty - add 0.
+    //case2: display contains a decimal number - do nothing
+    //case3: display contains whole number - add . after it
 }
 
 //All the event listeners
@@ -95,3 +144,9 @@ const backspace = document.querySelector('.backspace')
 backspace.addEventListener('click', deleteLastNum)
 const AC = document.querySelector('.clear')
 AC.addEventListener('click', allClear)
+
+const sign = document.querySelector('.plus-minus')
+sign.addEventListener('click', reverseSign)
+
+const decimal = document.querySelector('.decimal')
+decimal.addEventListener('click', handleDecimals)

@@ -43,7 +43,7 @@
     box-shadow: 3px 3px rgb(40, 60, 63);
 }
 .key:hover{
-    background: rgb(103, 202, 181);
+    background: rgb(142, 202, 103);
     cursor: pointer;
 }
 .calculate{
