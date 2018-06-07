@@ -49,10 +49,6 @@ function populateDisplay(e) {
             displayValue = 'Oh hell no!'
             snarkyMessage = false
         }
-        // else if(valueFlag) {
-        //     displayValue = displayValue
-        //     valueFlag = !valueFlag
-        // }
         else displayValue = lastResult
     }
     else{
@@ -65,8 +61,6 @@ function populateDisplay(e) {
     if(displayValue.length > 22) displayValue = displayValue.slice(1)
     document.querySelector('.display').innerHTML = displayValue
     if(displayValue == 'Oh hell no!') displayValue = ''
-    console.log(`DisplayValue: ${displayValue}, lastresult: ${lastResult}`)
-    
 }
 
 function calculate() {
@@ -80,14 +74,12 @@ function calculate() {
         lastResult = operate(currentOperator, Number(firstOperand), Number(secondOperand))
         populateDisplay()
     }
-    // console.log(operate(currentOperator, Number(firstOperand), Number(secondOperand)))
 }
 
 function deleteLastNum() {
     displayValue = displayValue.toString().slice(0,-1)
     deletedLast = true
     populateDisplay()
-    console.log(`Pressed backspace, called deleteLast, type: ${typeof displayValue} displayvalue: ${displayValue}`)
 }
 
 function allClear() {
@@ -121,9 +113,6 @@ function handleDecimals() {
         displayValue = `${displayValue}.`
     }
     populateDisplay()
-    //case1: display empty - add 0.
-    //case2: display contains a decimal number - do nothing
-    //case3: display contains whole number - add . after it
 }
 
 //All the event listeners
