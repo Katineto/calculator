@@ -8,7 +8,8 @@ Needs to be fixed:
     ✓ Add decimal support
     ✓ Find better name for deletedLast variable
     * Add keybord support
-    * Remove console.logs
+        -can't type in '0' because it's evaluated to false
+    ✓ Remove console.logs
     * Remove - sign if display has no number
 
     Calculation algorithm:

@@ -38,9 +38,14 @@ let deletedLast = false
 let snarkyMessage = false
 let valueFlag = false
 
-function populateDisplay(e) {
+function populateDisplay(e, keyvalue) {
     if(!e) {
-        if(deletedLast || valueFlag) {
+        if(keyvalue || keyvalue === '0') {
+            displayValue = `${displayValue}${keyvalue}`
+            console.log(`logging ${keyvalue}`)
+        }
+        // if(keyvalue === '0') console.log(`logging 0`)
+        else if(deletedLast || valueFlag) {
             displayValue = displayValue
             deletedLast = false
             valueFlag = false
@@ -100,7 +105,6 @@ function reverseSign() {
     populateDisplay()
 }
 function handleDecimals() {
-    console.log('decimal')
     if(displayValue == '') {
         displayValue = '0.'
         valueFlag = true
@@ -114,6 +118,11 @@ function handleDecimals() {
     }
     populateDisplay()
 }
+function handleOperators(e, keyvalue) {
+    currentOperator = e ? e.target.innerText : keyvalue
+    firstOperand = displayValue
+    displayValue = ''
+}
 
 //All the event listeners
 const numbers = document.querySelectorAll('.number')
@@ -123,11 +132,7 @@ const result = document.querySelector('.calculate')
 result.addEventListener('click', calculate)
 
 const operators = document.querySelectorAll('.operator')
-operators.forEach(operator => operator.addEventListener('click', e => {
-    currentOperator = e.target.innerText
-    firstOperand = displayValue
-    displayValue = ''
-}))
+operators.forEach(operator => operator.addEventListener('click', handleOperators))
 
 const backspace = document.querySelector('.backspace')
 backspace.addEventListener('click', deleteLastNum)
@@ -139,3 +144,44 @@ sign.addEventListener('click', reverseSign)
 
 const decimal = document.querySelector('.decimal')
 decimal.addEventListener('click', handleDecimals)
+
+// Adding keyboard support
+function keyboardSupport(e) {
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`)
+    const keyValue = key.innerHTML
+    switch(keyValue) {
+        case `←`:
+           deleteLastNum()
+            break   
+        case `=`:
+            calculate()
+            break
+        case `1`:
+        case `2`:
+        case `3`:
+        case `4`:
+        case `5`:
+        case `6`:
+        case `7`:
+        case `8`:
+        case `9`:
+        case `0`:
+            populateDisplay(undefined, keyValue)
+            break
+        case `/`:
+        case `*`:
+        case `+`:
+        case `-`:
+            handleOperators(undefined, keyValue)
+            break
+        case `.`:
+            handleDecimals()
+            break
+        case `AC`:
+            allClear()
+            break
+    }
+}
+
+window.addEventListener('keydown', keyboardSupport)
+
