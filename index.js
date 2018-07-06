@@ -42,9 +42,7 @@ function populateDisplay(e, keyvalue) {
     if(!e) {
         if(keyvalue || keyvalue === '0') {
             displayValue = `${displayValue}${keyvalue}`
-            console.log(`logging ${keyvalue}`)
         }
-        // if(keyvalue === '0') console.log(`logging 0`)
         else if(deletedLast || valueFlag) {
             displayValue = displayValue
             deletedLast = false
